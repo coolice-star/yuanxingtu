@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄时钟App原型</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f5f7;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        .prototype-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(375px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background-color: white;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin: 0 auto;
+            border: 12px solid #1a1a1a;
+        }
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 25px;
+            background-color: #1a1a1a;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 10;
+        }
+        .screen {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .screen-label {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-white shadow-md p-4 mb-6">
+        <h1 class="text-2xl font-bold text-center text-gray-800">番茄时钟App原型设计</h1>
+    </header>
+
+    <div class="prototype-container">
+        <div class="mb-8">
+            <div class="phone-frame">
+                <iframe src="splash.html" class="screen" frameborder="0"></iframe>
+            </div>
+            <div class="screen-label">启动界面</div>
+        </div>
+        
+        <div class="mb-8">
+            <div class="phone-frame">
+                <iframe src="timer.html" class="screen" frameborder="0"></iframe>
+            </div>
+            <div class="screen-label">计时器页面</div>
+        </div>
+        
+        <div class="mb-8">
+            <div class="phone-frame">
+                <iframe src="tasks.html" class="screen" frameborder="0"></iframe>
+            </div>
+            <div class="screen-label">任务列表页面</div>
+        </div>
+        
+        <div class="mb-8">
+            <div class="phone-frame">
+                <iframe src="statistics.html" class="screen" frameborder="0"></iframe>
+            </div>
+            <div class="screen-label">统计页面</div>
+        </div>
+        
+        <div class="mb-8">
+            <div class="phone-frame">
+                <iframe src="settings.html" class="screen" frameborder="0"></iframe>
+            </div>
+            <div class="screen-label">设置页面</div>
+        </div>
+        
+        <div class="mb-8">
+            <div class="phone-frame">
+                <iframe src="task-detail.html" class="screen" frameborder="0"></iframe>
+            </div>
+            <div class="screen-label">任务详情页面</div>
+        </div>
+        
+        <div class="mb-8">
+            <div class="phone-frame">
+                <iframe src="add-task.html" class="screen" frameborder="0"></iframe>
+            </div>
+            <div class="screen-label">添加任务页面</div>
+        </div>
+    </div>
+
+    <footer class="bg-white shadow-inner p-4 mt-6">
+        <p class="text-center text-gray-600">番茄时钟App原型 © 2024</p>
+    </footer>
+</body>
+</html> 

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄时钟 - 设置</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- iOS 状态栏 -->
+    <div class="ios-status-bar">
+        <div class="status-bar-time">14:30</div>
+        <div class="status-bar-icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <!-- 标题 -->
+        <h1 class="text-xl font-bold mb-4">设置</h1>
+
+        <!-- 时间设置 -->
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-4">时间设置</h2>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">工作时间</div>
+                    <div class="text-sm text-secondary">每个番茄的工作时长</div>
+                </div>
+                <div class="flex items-center">
+                    <input type="number" class="input w-16 text-center" value="25" min="1" max="60">
+                    <span class="ml-2">分钟</span>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">短休息时间</div>
+                    <div class="text-sm text-secondary">番茄之间的休息时长</div>
+                </div>
+                <div class="flex items-center">
+                    <input type="number" class="input w-16 text-center" value="5" min="1" max="30">
+                    <span class="ml-2">分钟</span>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">长休息时间</div>
+                    <div class="text-sm text-secondary">完成多个番茄后的长休息</div>
+                </div>
+                <div class="flex items-center">
+                    <input type="number" class="input w-16 text-center" value="15" min="5" max="60">
+                    <span class="ml-2">分钟</span>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">长休息间隔</div>
+                    <div class="text-sm text-secondary">多少个番茄后进行长休息</div>
+                </div>
+                <div class="flex items-center">
+                    <input type="number" class="input w-16 text-center" value="4" min="1" max="10">
+                    <span class="ml-2">个番茄</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自动化设置 -->
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-4">自动化设置</h2>
+            
+            <div class="setting-item">
+                <div class="setting-label">自动开始休息</div>
+                <label class="toggle">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-label">自动开始下一个番茄</div>
+                <label class="toggle">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 通知设置 -->
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-4">通知设置</h2>
+            
+            <div class="setting-item">
+                <div class="setting-label">通知提醒</div>
+                <label class="toggle">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-label">声音提醒</div>
+                <label class="toggle">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 外观设置 -->
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-4">外观设置</h2>
+            
+            <div class="setting-item">
+                <div class="setting-label">深色模式</div>
+                <label class="toggle">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 关于 -->
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-4">关于</h2>
+            
+            <div class="setting-item">
+                <div class="setting-label">版本</div>
+                <div>1.0.0</div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-label">反馈问题</div>
+                <i class="fas fa-chevron-right text-secondary"></i>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-label">隐私政策</div>
+                <i class="fas fa-chevron-right text-secondary"></i>
+            </div>
+        </div>
+
+        <!-- 保存按钮 -->
+        <button class="btn btn-primary btn-large mt-4 mb-4">保存设置</button>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="bottom-tab-bar">
+        <div class="tab-item" data-tab="timer">
+            <i class="fas fa-clock"></i>
+            <span>计时器</span>
+        </div>
+        <div class="tab-item" data-tab="tasks">
+            <i class="fas fa-tasks"></i>
+            <span>任务</span>
+        </div>
+        <div class="tab-item" data-tab="statistics">
+            <i class="fas fa-chart-bar"></i>
+            <span>统计</span>
+        </div>
+        <div class="tab-item active" data-tab="settings">
+            <i class="fas fa-cog"></i>
+            <span>设置</span>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // 页面特定的JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化设置管理器
+            const settingsManager = new SettingsManager();
+            const settings = settingsManager.getSettings();
+            
+            // 填充设置值
+            document.querySelector('input[value="25"]').value = settings.workTime / 60;
+            document.querySelector('input[value="5"]').value = settings.shortBreakTime / 60;
+            document.querySelector('input[value="15"]').value = settings.longBreakTime / 60;
+            document.querySelector('input[value="4"]').value = settings.longBreakInterval;
+            
+            // 设置开关状态
+            const toggles = document.querySelectorAll('.toggle input');
+            toggles[0].checked = settings.autoStartBreaks;
+            toggles[1].checked = settings.autoStartPomodoros;
+            toggles[2].checked = settings.notifications;
+            toggles[3].checked = settings.sounds;
+            toggles[4].checked = settings.darkMode;
+            
+            // 保存按钮点击事件
+            document.querySelector('.btn-primary.btn-large').addEventListener('click', function() {
+                // 获取所有设置值
+                const workTime = parseInt(document.querySelector('input[min="1"][max="60"]').value) * 60;
+                const shortBreakTime = parseInt(document.querySelector('input[min="1"][max="30"]').value) * 60;
+                const longBreakTime = parseInt(document.querySelector('input[min="5"][max="60"]').value) * 60;
+                const longBreakInterval = parseInt(document.querySelector('input[min="1"][max="10"]').value);
+                
+                const autoStartBreaks = toggles[0].checked;
+                const autoStartPomodoros = toggles[1].checked;
+                const notifications = toggles[2].checked;
+                const sounds = toggles[3].checked;
+                const darkMode = toggles[4].checked;
+                
+                // 更新设置
+                settingsManager.updateSettings({
+                    workTime,
+                    shortBreakTime,
+                    longBreakTime,
+                    longBreakInterval,
+                    autoStartBreaks,
+                    autoStartPomodoros,
+                    notifications,
+                    sounds,
+                    darkMode
+                });
+                
+                // 显示保存成功提示（简单模拟）
+                alert('设置已保存');
+            });
+            
+            // 深色模式切换
+            toggles[4].addEventListener('change', function() {
+                if (this.checked) {
+                    document.documentElement.classList.add('dark-mode');
+                } else {
+                    document.documentElement.classList.remove('dark-mode');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

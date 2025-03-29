@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄时钟 - 统计</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- iOS 状态栏 -->
+    <div class="ios-status-bar">
+        <div class="status-bar-time">14:30</div>
+        <div class="status-bar-icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <!-- 标题 -->
+        <h1 class="text-xl font-bold mb-4">统计</h1>
+
+        <!-- 时间范围选择 -->
+        <div class="flex mb-4 gap-2">
+            <button class="btn btn-outline rounded-full px-4 py-2">今日</button>
+            <button class="btn btn-outline rounded-full px-4 py-2 active">本周</button>
+            <button class="btn btn-outline rounded-full px-4 py-2">本月</button>
+            <button class="btn btn-outline rounded-full px-4 py-2">全部</button>
+        </div>
+
+        <!-- 总计数据 -->
+        <div class="card">
+            <div class="flex justify-between">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-primary">24</div>
+                    <div class="text-sm text-secondary">完成番茄</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-primary">10:00</div>
+                    <div class="text-sm text-secondary">专注时间</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-primary">12</div>
+                    <div class="text-sm text-secondary">完成任务</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图表 - 每日番茄数 -->
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-4">每日番茄数</h2>
+            <div class="chart-container" style="height: 200px;">
+                <canvas id="pomodoroChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 图表 - 每日专注时间 -->
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-4">每日专注时间（小时）</h2>
+            <div class="chart-container" style="height: 200px;">
+                <canvas id="timeChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 最高效日 -->
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-4">最高效日</h2>
+            <div class="flex items-center">
+                <div class="flex-1">
+                    <div class="list-item-title">周三（3月10日）</div>
+                    <div class="list-item-subtitle">
+                        <i class="fas fa-tomato text-primary"></i> 8个番茄 | 
+                        <i class="fas fa-clock text-primary"></i> 3:20小时
+                    </div>
+                </div>
+                <div>
+                    <i class="fas fa-trophy text-warning text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 任务完成情况 -->
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-4">任务完成情况</h2>
+            <div class="flex justify-center items-center">
+                <div class="relative" style="width: 150px; height: 150px;">
+                    <canvas id="taskCompletionChart"></canvas>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <div class="text-2xl font-bold">75%</div>
+                        <div class="text-sm text-secondary">完成率</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="bottom-tab-bar">
+        <div class="tab-item" data-tab="timer">
+            <i class="fas fa-clock"></i>
+            <span>计时器</span>
+        </div>
+        <div class="tab-item" data-tab="tasks">
+            <i class="fas fa-tasks"></i>
+            <span>任务</span>
+        </div>
+        <div class="tab-item active" data-tab="statistics">
+            <i class="fas fa-chart-bar"></i>
+            <span>统计</span>
+        </div>
+        <div class="tab-item" data-tab="settings">
+            <i class="fas fa-cog"></i>
+            <span>设置</span>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // 页面特定的JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化统计管理器
+            const statsManager = new StatsManager();
+            
+            // 时间范围选择按钮点击事件
+            const rangeButtons = document.querySelectorAll('.btn.btn-outline.rounded-full');
+            rangeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    rangeButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 在实际应用中，这里会根据选择的时间范围更新统计数据和图表
+                });
+            });
+            
+            // 初始化番茄数量图表
+            const pomodoroChartCtx = document.getElementById('pomodoroChart').getContext('2d');
+            const pomodoroChart = new Chart(pomodoroChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [{
+                        label: '番茄数',
+                        data: [3, 5, 8, 4, 2, 1, 1],
+                        backgroundColor: '#FF6347',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 初始化专注时间图表
+            const timeChartCtx = document.getElementById('timeChart').getContext('2d');
+            const timeChart = new Chart(timeChartCtx, {
+                type: 'line',
+                data: {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [{
+                        label: '专注时间（小时）',
+                        data: [1.25, 2.08, 3.33, 1.67, 0.83, 0.42, 0.42],
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // 初始化任务完成情况图表
+            const taskCompletionChartCtx = document.getElementById('taskCompletionChart').getContext('2d');
+            const taskCompletionChart = new Chart(taskCompletionChartCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['已完成', '未完成'],
+                    datasets: [{
+                        data: [75, 25],
+                        backgroundColor: ['#4CAF50', '#E5E5E5'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

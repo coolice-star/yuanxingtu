@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄时钟 - 添加任务</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- iOS 状态栏 -->
+    <div class="ios-status-bar">
+        <div class="status-bar-time">14:30</div>
+        <div class="status-bar-icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <!-- 标题和返回按钮 -->
+        <div class="flex justify-between items-center mb-4">
+            <a href="tasks.html" class="text-primary">
+                <i class="fas fa-arrow-left"></i> 取消
+            </a>
+            <h1 class="text-xl font-bold">添加任务</h1>
+            <button class="text-primary font-semibold" id="saveTask">保存</button>
+        </div>
+
+        <!-- 任务表单 -->
+        <div class="card">
+            <div class="input-group">
+                <label class="input-label" for="taskTitle">任务名称</label>
+                <input type="text" id="taskTitle" class="input" placeholder="输入任务名称">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label" for="taskDescription">任务描述（可选）</label>
+                <textarea id="taskDescription" class="input" rows="4" placeholder="输入任务描述"></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">预计番茄数</label>
+                <div class="flex items-center">
+                    <button class="btn btn-outline rounded-full w-8 h-8 flex items-center justify-center p-0" id="decreasePomodoro">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="mx-4 text-xl font-bold" id="pomodoroCount">1</span>
+                    <button class="btn btn-outline rounded-full w-8 h-8 flex items-center justify-center p-0" id="increasePomodoro">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">优先级</label>
+                <div class="flex gap-2">
+                    <button class="btn btn-outline rounded-full px-4 py-2 active" data-priority="low">低</button>
+                    <button class="btn btn-outline rounded-full px-4 py-2" data-priority="medium">中</button>
+                    <button class="btn btn-outline rounded-full px-4 py-2" data-priority="high">高</button>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label" for="taskCategory">分类</label>
+                <select id="taskCategory" class="input">
+                    <option value="">无分类</option>
+                    <option value="work">工作</option>
+                    <option value="study">学习</option>
+                    <option value="personal">个人</option>
+                    <option value="other">其他</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label" for="taskDeadline">截止日期（可选）</label>
+                <input type="date" id="taskDeadline" class="input">
+            </div>
+        </div>
+
+        <!-- 添加标签 -->
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-4">标签</h2>
+            
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full flex items-center">
+                    设计
+                    <button class="ml-1">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                </span>
+                <span class="bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full flex items-center">
+                    原型
+                    <button class="ml-1">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                </span>
+            </div>
+            
+            <div class="flex">
+                <input type="text" class="input flex-1 mr-2" placeholder="添加标签">
+                <button class="btn btn-outline">添加</button>
+            </div>
+        </div>
+
+        <!-- 保存按钮 -->
+        <button class="btn btn-primary btn-large mt-4 mb-4" id="saveTaskBottom">
+            保存任务
+        </button>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="bottom-tab-bar">
+        <div class="tab-item" data-tab="timer">
+            <i class="fas fa-clock"></i>
+            <span>计时器</span>
+        </div>
+        <div class="tab-item active" data-tab="tasks">
+            <i class="fas fa-tasks"></i>
+            <span>任务</span>
+        </div>
+        <div class="tab-item" data-tab="statistics">
+            <i class="fas fa-chart-bar"></i>
+            <span>统计</span>
+        </div>
+        <div class="tab-item" data-tab="settings">
+            <i class="fas fa-cog"></i>
+            <span>设置</span>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // 页面特定的JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化任务管理器
+            const taskManager = new TaskManager();
+            
+            // 预计番茄数增减按钮
+            const decreaseBtn = document.getElementById('decreasePomodoro');
+            const increaseBtn = document.getElementById('increasePomodoro');
+            const pomodoroCountEl = document.getElementById('pomodoroCount');
+            let pomodoroCount = 1;
+            
+            decreaseBtn.addEventListener('click', function() {
+                if (pomodoroCount > 1) {
+                    pomodoroCount--;
+                    pomodoroCountEl.textContent = pomodoroCount;
+                }
+            });
+            
+            increaseBtn.addEventListener('click', function() {
+                pomodoroCount++;
+                pomodoroCountEl.textContent = pomodoroCount;
+            });
+            
+            // 优先级按钮点击事件
+            const priorityButtons = document.querySelectorAll('[data-priority]');
+            priorityButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    priorityButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // 保存任务
+            function saveTask() {
+                const title = document.getElementById('taskTitle').value.trim();
+                if (!title) {
+                    alert('请输入任务名称');
+                    return;
+                }
+                
+                const description = document.getElementById('taskDescription').value.trim();
+                const estimatedPomodoros = pomodoroCount;
+                const priority = document.querySelector('[data-priority].active').dataset.priority;
+                const category = document.getElementById('taskCategory').value;
+                const deadline = document.getElementById('taskDeadline').value;
+                
+                // 获取标签
+                const tags = [];
+                document.querySelectorAll('.bg-primary.bg-opacity-10').forEach(tag => {
+                    tags.push(tag.textContent.trim());
+                });
+                
+                // 创建任务对象
+                const task = {
+                    title,
+                    description,
+                    estimatedPomodoros,
+                    priority,
+                    category,
+                    deadline,
+                    tags
+                };
+                
+                // 在实际应用中，这里会添加任务并跳转回任务列表页面
+                console.log('保存任务:', task);
+                taskManager.addTask(task);
+                
+                // 跳转回任务列表页面
+                window.location.href = 'tasks.html';
+            }
+            
+            // 保存按钮点击事件
+            document.getElementById('saveTask').addEventListener('click', saveTask);
+            document.getElementById('saveTaskBottom').addEventListener('click', saveTask);
+            
+            // 添加标签按钮点击事件
+            document.querySelector('.btn-outline').addEventListener('click', function() {
+                const tagInput = document.querySelector('input[placeholder="添加标签"]');
+                const tagText = tagInput.value.trim();
+                
+                if (tagText) {
+                    const tagsContainer = document.querySelector('.flex.flex-wrap.gap-2');
+                    
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-full flex items-center';
+                    tagElement.innerHTML = `
+                        ${tagText}
+                        <button class="ml-1">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    `;
+                    
+                    tagsContainer.appendChild(tagElement);
+                    tagInput.value = '';
+                    
+                    // 删除标签按钮点击事件
+                    tagElement.querySelector('button').addEventListener('click', function() {
+                        tagElement.remove();
+                    });
+                }
+            });
+            
+            // 已有标签的删除按钮点击事件
+            document.querySelectorAll('.bg-primary.bg-opacity-10 button').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.parentElement.remove();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

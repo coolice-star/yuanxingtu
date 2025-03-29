@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄时钟 - 计时器</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- iOS 状态栏 -->
+    <div class="ios-status-bar">
+        <div class="status-bar-time">14:30</div>
+        <div class="status-bar-icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <!-- 当前任务 -->
+        <div class="card">
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="text-lg font-semibold">当前任务</h2>
+                <button class="text-primary">
+                    <i class="fas fa-exchange-alt"></i> 切换
+                </button>
+            </div>
+            <div class="flex items-center">
+                <div class="flex-1">
+                    <div class="list-item-title">完成产品原型设计</div>
+                    <div class="list-item-subtitle">
+                        <i class="fas fa-tomato text-primary"></i> 2/4
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-outline rounded-full w-8 h-8 flex items-center justify-center p-0">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 计时器 -->
+        <div class="card">
+            <div class="flex justify-center gap-4 mb-4">
+                <button class="btn btn-outline rounded-full px-4 py-2 active">工作</button>
+                <button class="btn btn-outline rounded-full px-4 py-2">短休息</button>
+                <button class="btn btn-outline rounded-full px-4 py-2">长休息</button>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-bar-fill" style="width: 45%;"></div>
+            </div>
+            
+            <div class="timer-display">
+                <div class="timer-value">23:45</div>
+                <div class="timer-label">专注工作中</div>
+            </div>
+            
+            <div class="timer-controls">
+                <button class="btn btn-circle btn-outline">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button class="btn btn-circle btn-primary">
+                    <i class="fas fa-pause"></i>
+                </button>
+                <button class="btn btn-circle btn-outline">
+                    <i class="fas fa-forward"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 今日统计 -->
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-4">今日统计</h2>
+            <div class="flex justify-between">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-primary">4</div>
+                    <div class="text-sm text-secondary">完成番茄</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-primary">1:40</div>
+                    <div class="text-sm text-secondary">专注时间</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-primary">2</div>
+                    <div class="text-sm text-secondary">完成任务</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="bottom-tab-bar">
+        <div class="tab-item active" data-tab="timer">
+            <i class="fas fa-clock"></i>
+            <span>计时器</span>
+        </div>
+        <div class="tab-item" data-tab="tasks">
+            <i class="fas fa-tasks"></i>
+            <span>任务</span>
+        </div>
+        <div class="tab-item" data-tab="statistics">
+            <i class="fas fa-chart-bar"></i>
+            <span>统计</span>
+        </div>
+        <div class="tab-item" data-tab="settings">
+            <i class="fas fa-cog"></i>
+            <span>设置</span>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // 页面特定的JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化计时器
+            const timer = new PomodoroTimer();
+            const timerValueElement = document.querySelector('.timer-value');
+            const timerLabelElement = document.querySelector('.timer-label');
+            const progressBarElement = document.querySelector('.progress-bar-fill');
+            const startPauseButton = document.querySelector('.btn-primary');
+            
+            // 设置回调函数
+            timer.setCallbacks({
+                onTick: (time, progress) => {
+                    timerValueElement.textContent = formatTime(time);
+                    progressBarElement.style.width = `${progress}%`;
+                },
+                onComplete: (mode, completedPomodoros) => {
+                    let modeText = '';
+                    switch(mode) {
+                        case 'work':
+                            modeText = '专注工作';
+                            break;
+                        case 'shortBreak':
+                            modeText = '短休息';
+                            break;
+                        case 'longBreak':
+                            modeText = '长休息';
+                            break;
+                    }
+                    timerLabelElement.textContent = `${modeText}中`;
+                },
+                onStateChange: (isRunning, mode) => {
+                    if (isRunning) {
+                        startPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+                    } else {
+                        startPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+                    }
+                }
+            });
+            
+            // 开始/暂停按钮点击事件
+            startPauseButton.addEventListener('click', function() {
+                if (timer.isRunning) {
+                    timer.pause();
+                } else {
+                    timer.start();
+                }
+            });
+            
+            // 重置按钮点击事件
+            document.querySelector('.timer-controls .btn-outline:first-child').addEventListener('click', function() {
+                timer.reset();
+            });
+            
+            // 跳过按钮点击事件
+            document.querySelector('.timer-controls .btn-outline:last-child').addEventListener('click', function() {
+                timer.complete();
+            });
+            
+            // 模式切换按钮点击事件
+            const modeButtons = document.querySelectorAll('.card button.btn-outline.rounded-full');
+            modeButtons.forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    modeButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const modes = ['work', 'shortBreak', 'longBreak'];
+                    timer.setMode(modes[index]);
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
